@@ -11,7 +11,7 @@ export default function Home() {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const downloadPdf = async (blob: Blob) => {
+  const downloadFile = async (blob: Blob) => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
@@ -19,17 +19,19 @@ export default function Home() {
     document.body.appendChild(link);
     link.click();
     link.parentNode?.removeChild(link);
-
-    if (fileInput.current) {
-      fileInput.current.value = "";
-    }
-    setFile(null);
-    setFullName("");
   };
 
   const getLocalISODate = () => {
     const date = new Date();
     return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
+  };
+
+  const resetForm = () => {
+    if (fileInput.current) {
+      fileInput.current.value = "";
+    }
+    setFile(null);
+    setFullName("");
   };
 
   const onFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,8 +46,9 @@ export default function Home() {
     setLoading(true);
     const pdfBuffer = await file.arrayBuffer();
     const pdfBlob = await addSignature(pdfBuffer, fullName);
+    downloadFile(pdfBlob);
     await uploadFile(pdfBlob, `${file?.name.split(".pdf")[0]}-${getLocalISODate()}.pdf`);
-    downloadPdf(pdfBlob);
+    resetForm();
     setLoading(false);
   };
 
