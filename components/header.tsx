@@ -1,4 +1,4 @@
-import { FileSignature } from "lucide-react"
+import { FileSignature } from "lucide-react";
 
 export function Header() {
   return (
@@ -12,6 +12,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  )
+  );
 }
-

@@ -88,16 +88,16 @@ export function FileUpload() {
                 <Check className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <h3 className="text-2xl font-semibold text-gray-900">Successfully Signed!</h3>
-            <p className="text-gray-600">Your document has been successfully signed and is ready for download.</p>
+            <h3 className="text-2xl font-semibold text-gray-900">Sikeres aláírás!</h3>
+            <p className="text-gray-600">Az aláírt dokumentum elkészült és készen áll a letöltésre.</p>
             <div className="flex justify-center space-x-4">
               {/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
               <Button className="flex items-center space-x-2" onClick={() => downloadFile(fileBlob!)}>
                 <Download className="h-5 w-5" />
-                <span>Download Signed PDF</span>
+                <span>Aláírt PDF letöltése</span>
               </Button>
               <Button variant="outline" onClick={handleReset}>
-                Sign Another Document
+                Másik dokumentum aláírása
               </Button>
             </div>
           </div>
@@ -118,12 +118,12 @@ export function FileUpload() {
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="signer-name" className="block text-sm font-medium text-gray-700">
-                    Your Name
+                    Név
                   </label>
                   <Input
                     id="signer-name"
                     type="text"
-                    placeholder="Enter your name"
+                    placeholder="Adja meg a saját nevét"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="max-w-md mx-auto"
@@ -141,12 +141,12 @@ export function FileUpload() {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                         />
                       </svg>
-                      Signing...
+                      Aláírás folyamatban...
                     </span>
                   ) : (
                     <span className="flex items-center space-x-2">
                       <Check className="h-5 w-5" />
-                      <span>Sign Document</span>
+                      <span>Aláírom</span>
                     </span>
                   )}
                 </Button>
@@ -157,11 +157,13 @@ export function FileUpload() {
                   <Upload className="h-12 w-12 text-gray-400" />
                 </div>
                 <div className="space-y-2">
-                  <p className="text-xl font-medium">Upload your PDF</p>
-                  <p className="text-sm text-gray-500">Drag and drop your file here, or click to select</p>
+                  <p className="text-xl font-medium">PDF feltöltés</p>
+                  <p className="text-sm text-gray-500">
+                    Húzd és ejtsd ide a megfelelő fájlt vagy kattints a kiválasztásra
+                  </p>
                 </div>
                 <Button variant="outline" onClick={() => document.getElementById("file-upload")?.click()}>
-                  Select File
+                  Fájl kiválasztása
                 </Button>
                 <input
                   id="file-upload"
