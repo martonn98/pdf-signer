@@ -123,7 +123,7 @@ export function FileUpload() {
                   <Input
                     id="signer-name"
                     type="text"
-                    placeholder="Adja meg a saját nevét"
+                    placeholder="Add meg a saját neved"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="max-w-md mx-auto"
