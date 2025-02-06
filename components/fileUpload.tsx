@@ -24,18 +24,26 @@ export function FileUpload() {
     setIsDragging(false);
   };
 
+  const checkFileSize = (file: File) => {
+    if (file.size >= 5 * 1000 * 1024) {
+      alert("Túl nagy fájl méret! A maximális méret 5MB.");
+      return false;
+    }
+    return true;
+  };
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile?.type === "application/pdf") {
+    if (droppedFile?.type === "application/pdf" && checkFileSize(droppedFile)) {
       setFile(droppedFile);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
+    if (selectedFile && checkFileSize(selectedFile)) {
       setFile(selectedFile);
     }
   };
