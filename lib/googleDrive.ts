@@ -31,8 +31,7 @@ export const uploadFile = async (file: Blob, fileName: string) => {
       },
       media: {
         mimeType: "application/pdf",
-        // @ts-expect-error ts is dumb af
-        body: Readable.fromWeb(file.stream()),
+        body: Readable.fromWeb(file.stream() as any),
       },
       fields: "id",
     });

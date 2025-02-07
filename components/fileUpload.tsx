@@ -3,8 +3,8 @@ import { Upload, File, Check, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { addSignature } from "@/utils/pdf";
-import { uploadFile } from "@/utils/googleDrive";
+import { addSignature } from "@/lib/pdf";
+import { uploadFile } from "@/lib/googleDrive";
 
 export function FileUpload() {
   const [file, setFile] = useState<File | null>(null);
@@ -98,7 +98,7 @@ export function FileUpload() {
             </div>
             <h3 className="text-2xl font-semibold text-gray-900">Sikeres aláírás!</h3>
             <p className="text-gray-600">Az aláírt dokumentum elkészült és készen áll a letöltésre.</p>
-            <div className="flex justify-center space-x-4">
+            <div className="flex flex-col justify-center space-y-2 sm:space-y-0 sm:space-x-4 sm:flex-row">
               {/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
               <Button className="flex items-center space-x-2" onClick={() => downloadFile(fileBlob!)}>
                 <Download className="h-5 w-5" />
@@ -122,7 +122,7 @@ export function FileUpload() {
               <div className="space-y-6">
                 <div className="flex items-center justify-center space-x-2 text-primary">
                   <File className="h-8 w-8" />
-                  <span className="font-medium">{file.name}</span>
+                  <span className="font-medium">{file?.name}</span>
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="signer-name" className="block text-sm font-medium text-gray-700">
