@@ -14,6 +14,7 @@ const authorize = async () => {
   try {
     await auth.authorize();
     return auth;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (error: any) {
     throw new Error(`Error authorizing Google Drive API: ${error.message}`);
   }
@@ -31,6 +32,7 @@ export const uploadFile = async (file: Blob, fileName: string) => {
       },
       media: {
         mimeType: "application/pdf",
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         body: Readable.fromWeb(file.stream() as any),
       },
       fields: "id",
@@ -38,6 +40,7 @@ export const uploadFile = async (file: Blob, fileName: string) => {
 
     console.log("File uploaded successfully. File ID:", response.data.id);
     return response.data;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (error: any) {
     throw new Error(`Error uploading file to Google Drive: ${error.message}`);
   }

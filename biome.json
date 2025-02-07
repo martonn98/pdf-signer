@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "include": ["./utils/**/*", "./app/**/*", "./components/**/*"]
+    "include": ["./lib/**/*", "./app/**/*", "./components/**/*"]
   },
   "formatter": {
     "enabled": true,
