@@ -74,7 +74,6 @@ export function FileUpload() {
     downloadFile(pdfBlob);
     await uploadFile(pdfBlob, `${file?.name.split(".pdf")[0]}-${getLocalISODate()}.pdf`);
 
-    // resetForm();
     setIsLoading(false);
     setIsSuccess(true);
   };
