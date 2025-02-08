@@ -15,13 +15,13 @@ export const addSignature = async (pdf: ArrayBuffer, name: string): Promise<Blob
   page.drawText(`Aláírta: ${name}`, { size: fontSize });
 
   page.moveDown(fontSize);
-  const timestamp = new Date().toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
-  page.drawText(timestamp, { size: 20 });
+  const headersList = await headers();
+  const ip = headersList.get("x-forwarded-for");
+  page.drawText(ip ? `IP: ${ip}` : "", { size: 16 });
 
   page.moveDown(fontSize);
-  const headersList = await headers()
-  const ip = headersList.get('x-forwarded-for')
-  page.drawText(ip ?? '', { size: 16 });
+  const timestamp = new Date().toLocaleString("hu-HU", { timeZone: "Europe/Budapest" });
+  page.drawText(timestamp, { size: 16 });
 
   const pdfBytes = await pdfDoc.save();
   return new Blob([pdfBytes], { type: "application/pdf" });

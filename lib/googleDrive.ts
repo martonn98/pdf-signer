@@ -1,6 +1,6 @@
 "use server";
 
-import { google } from "googleapis";
+import { type drive_v3, google } from "googleapis";
 import { Readable } from "node:stream";
 
 const authorize = async () => {
@@ -17,6 +17,49 @@ const authorize = async () => {
     // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (error: any) {
     throw new Error(`Error authorizing Google Drive API: ${error.message}`);
+  }
+};
+
+export const loadFile = async (id: string): Promise<{ file: Blob; fileMeta: drive_v3.Schema$File }> => {
+  const auth = await authorize();
+  const drive = google.drive({ version: "v3", auth });
+
+  try {
+    const fileMeta = await drive.files.get({
+      fileId: id,
+      supportsAllDrives: true,
+      fields: "name, mimeType, size",
+    });
+
+    const file = await drive.files.get(
+      {
+        fileId: id,
+        alt: "media",
+      },
+      {
+        responseType: "stream",
+      },
+    );
+
+    const chunks: Buffer[] = [];
+    return new Promise((resolve, reject) => {
+      file.data.on("data", (chunk) => {
+        chunks.push(chunk);
+      });
+
+      file.data.on("end", () => {
+        const buffer = Buffer.concat(chunks);
+        const blob = new Blob([buffer]);
+        resolve({ file: blob, fileMeta: fileMeta.data });
+      });
+
+      file.data.on("error", (error) => {
+        reject(new Error(`Error reading file stream: ${error.message}`));
+      });
+    });
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  } catch (error: any) {
+    throw new Error(`Error loading file from Google Drive: ${error.message}`);
   }
 };
 

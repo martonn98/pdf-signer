@@ -1,18 +1,29 @@
-import { useState } from "react";
-import { Upload, File, Check, Download } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Upload, File as FileIcon, Check, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { addSignature } from "@/lib/pdf";
-import { uploadFile } from "@/lib/googleDrive";
+import { loadFile, uploadFile } from "@/lib/googleDrive";
 
-export function FileUpload() {
+export function FileUpload({ downloadId }: { downloadId?: string }) {
   const [file, setFile] = useState<File | null>(null);
   const [fileBlob, setFileBlob] = useState<Blob | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(!!downloadId);
   const [isSuccess, setIsSuccess] = useState(false);
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (downloadId) {
+      loadFile(downloadId).then((x) => {
+        if (x.fileMeta.mimeType === "application/pdf" && checkFileSize(Number(x.fileMeta.size))) {
+          setFile(new File([x.file], x.fileMeta.name ?? "document.pdf", { type: x.fileMeta.mimeType }));
+          setIsLoading(false);
+        }
+      });
+    }
+  }, [downloadId]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -24,8 +35,8 @@ export function FileUpload() {
     setIsDragging(false);
   };
 
-  const checkFileSize = (file: File) => {
-    if (file.size >= 5 * 1000 * 1024) {
+  const checkFileSize = (size: number) => {
+    if (size >= 5 * 1000 * 1024) {
       alert("Túl nagy fájl méret! A maximális méret 5MB.");
       return false;
     }
@@ -36,14 +47,14 @@ export function FileUpload() {
     e.preventDefault();
     setIsDragging(false);
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile?.type === "application/pdf" && checkFileSize(droppedFile)) {
+    if (droppedFile?.type === "application/pdf" && checkFileSize(droppedFile.size)) {
       setFile(droppedFile);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile && checkFileSize(selectedFile)) {
+    if (selectedFile && checkFileSize(selectedFile.size)) {
       setFile(selectedFile);
     }
   };
@@ -71,8 +82,8 @@ export function FileUpload() {
     const pdfBlob = await addSignature(pdfBuffer, name);
     setFileBlob(pdfBlob);
 
-    downloadFile(pdfBlob);
     await uploadFile(pdfBlob, `${file?.name.split(".pdf")[0]}-${getLocalISODate()}.pdf`);
+    downloadFile(pdfBlob);
 
     setIsLoading(false);
     setIsSuccess(true);
@@ -83,6 +94,11 @@ export function FileUpload() {
     setFileBlob(null);
     setName("");
     setIsSuccess(false);
+  };
+
+  const openFileOnNewTab = async () => {
+    const blobUrl = URL.createObjectURL(file);
+    window.open(blobUrl, "_blank");
   };
 
   return (
@@ -118,10 +134,20 @@ export function FileUpload() {
             onDrop={handleDrop}
           >
             {file ? (
-              <div className="space-y-6">
+              <div className="space-y-2">
                 <div className="flex items-center justify-center space-x-2 text-primary">
-                  <File className="h-8 w-8" />
+                  <FileIcon className="h-8 w-8" />
                   <span className="font-medium">{file?.name}</span>
+                </div>
+                <div className="flex flex-col justify-center !mb-6 w-full max-w-md mx-auto space-y-2 sm:space-y-0 sm:space-x-4 sm:flex-row">
+                  <Button className="w-full max-w-md mx-auto" variant="outline" onClick={openFileOnNewTab}>
+                    Fájl megtekintése
+                  </Button>
+                  {!downloadId ? (
+                    <Button className="w-full max-w-md mx-auto" variant="outline" onClick={handleReset}>
+                      Másik fájl kiválasztása
+                    </Button>
+                  ) : null}
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="signer-name" className="block text-sm font-medium text-gray-700">
@@ -157,6 +183,15 @@ export function FileUpload() {
                     </span>
                   )}
                 </Button>
+              </div>
+            ) : isLoading ? (
+              <div>
+                <div className="flex justify-center">
+                  <svg className="animate-spin h-8 w-8 text-gray-400" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                  </svg>
+                </div>
               </div>
             ) : (
               <div className="space-y-4">
