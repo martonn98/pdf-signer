@@ -35,6 +35,6 @@ pnpm build
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 To preload a pdf file from Google Drive, add the file ID to the path, like\
-https://drive.google.com/file/d/XXXXX/view?usp=drive_link\
-http://localhost:3000/XXXXX\
+https://drive.google.com/file/d/XXXXX/view?usp=drive_link \
+http://localhost:3000/XXXXX \
 You can get the file ID by generating a sharing link on Google Drive.
