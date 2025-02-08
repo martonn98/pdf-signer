@@ -69,11 +69,6 @@ export function Sign({ downloadId }: { downloadId?: string }) {
     link.parentNode?.removeChild(link);
   };
 
-  const getLocalISODate = () => {
-    const date = new Date();
-    return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString();
-  };
-
   const handleSubmit = async () => {
     if (!file || !name.trim()) return;
     setIsLoading(true);
@@ -82,8 +77,7 @@ export function Sign({ downloadId }: { downloadId?: string }) {
     const pdfBlob = await addSignature(pdfBuffer, name);
     setFileBlob(pdfBlob);
 
-    await uploadFile(pdfBlob, `${file?.name.split(".pdf")[0]}-${getLocalISODate()}.pdf`);
-    downloadFile(pdfBlob);
+    await uploadFile(pdfBlob, `${name}-${file?.name.split(".pdf")[0]}.pdf`);
 
     setIsLoading(false);
     setIsSuccess(true);
