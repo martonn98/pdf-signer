@@ -1,7 +1,7 @@
 "use client";
 
-import { FileUpload } from "@/components/fileUpload";
+import { Sign } from "@/components/sign";
 
 export default function Home() {
-  return <FileUpload />;
+  return <Sign />;
 }

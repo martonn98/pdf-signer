@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { addSignature } from "@/lib/pdf";
 import { loadFile, uploadFile } from "@/lib/googleDrive";
 
-export function FileUpload({ downloadId }: { downloadId?: string }) {
+export function Sign({ downloadId }: { downloadId?: string }) {
   const [file, setFile] = useState<File | null>(null);
   const [fileBlob, setFileBlob] = useState<Blob | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -96,7 +96,8 @@ export function FileUpload({ downloadId }: { downloadId?: string }) {
     setIsSuccess(false);
   };
 
-  const openFileOnNewTab = async () => {
+  const openFileOnNewTab = () => {
+    if (!file) return;
     const blobUrl = URL.createObjectURL(file);
     window.open(blobUrl, "_blank");
   };
@@ -114,11 +115,12 @@ export function FileUpload({ downloadId }: { downloadId?: string }) {
             <h3 className="text-2xl font-semibold text-gray-900">Sikeres aláírás!</h3>
             <p className="text-gray-600">Az aláírt dokumentum elkészült és készen áll a letöltésre.</p>
             <div className="flex flex-col justify-center space-y-2 sm:space-y-0 sm:space-x-4 sm:flex-row">
-              {/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
-              <Button className="flex items-center space-x-2" onClick={() => downloadFile(fileBlob!)}>
-                <Download className="h-5 w-5" />
-                <span>Aláírt PDF letöltése</span>
-              </Button>
+              {fileBlob && (
+                <Button className="flex items-center space-x-2" onClick={() => downloadFile(fileBlob)}>
+                  <Download className="h-5 w-5" />
+                  <span>Aláírt PDF letöltése</span>
+                </Button>
+              )}
               <Button variant="outline" onClick={handleReset}>
                 Másik dokumentum aláírása
               </Button>
@@ -165,8 +167,8 @@ export function FileUpload({ downloadId }: { downloadId?: string }) {
                 <Button onClick={handleSubmit} disabled={isLoading || !name.trim()} className="w-full max-w-md mx-auto">
                   {isLoading ? (
                     <span className="flex items-center space-x-2">
-                      {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
                       <svg className="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">
+                        <title>Loading</title>
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                         <path
                           className="opacity-75"
@@ -188,6 +190,7 @@ export function FileUpload({ downloadId }: { downloadId?: string }) {
               <div>
                 <div className="flex justify-center">
                   <svg className="animate-spin h-8 w-8 text-gray-400" viewBox="0 0 24 24">
+                    <title>Loading</title>
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>

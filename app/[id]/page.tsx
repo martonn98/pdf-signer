@@ -1,14 +1,9 @@
 "use client";
 
-import { FileUpload } from "@/components/fileUpload";
+import { Sign } from "@/components/sign";
 import React from "react";
 
-export default function Home({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default function Home({ params }: { params: Promise<{ id: string }> }) {
   const { id } = React.use(params);
-
-  return <FileUpload downloadId={id} />;
+  return <Sign downloadId={id} />;
 }

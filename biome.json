@@ -7,7 +7,7 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "include": ["./lib/**/*", "./app/**/*", "./components/**/*"]
+    "ignore": ["./node_modules/**/*", "./next/**/*", "./next-env.d.ts"]
   },
   "formatter": {
     "enabled": true,
