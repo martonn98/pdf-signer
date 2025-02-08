@@ -22,6 +22,8 @@ https://drive.google.com/drive/folders/XXXXX you only need the last dynamic part
 ## Run the application
 
 ```bash
+# use correct node.js version
+nvm use
 # install dependencies
 pnpm i
 # start dev server
