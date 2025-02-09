@@ -38,3 +38,7 @@ To preload a pdf file from Google Drive, add the file ID to the path, like\
 https://drive.google.com/file/d/XXXXX/view?usp=drive_link \
 http://localhost:3000/XXXXX \
 You can get the file ID by generating a sharing link on Google Drive.
+
+## Limitations
+
+The maximum file size supported by Google Drive simple upload is 5 MB. Vercel support only 4.5 MB as request body. If you need support for larger files, you have to implement resumable upload to Google Drive and sending the file to Vercel Blob for example, instead of putting it to the request body.

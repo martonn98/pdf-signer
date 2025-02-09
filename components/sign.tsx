@@ -36,8 +36,8 @@ export function Sign({ downloadId }: { downloadId?: string }) {
   };
 
   const checkFileSize = (size: number) => {
-    if (size >= 5 * 1000 * 1024) {
-      alert("Túl nagy fájl méret! A maximális méret 5MB.");
+    if (size >= 4.5 * 1000 * 1024) {
+      alert("Túl nagy fájl méret! A maximális méret 4.5 MB.");
       return false;
     }
     return true;
