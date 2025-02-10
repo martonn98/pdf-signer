@@ -43,8 +43,7 @@ export const addSignature = async (pdf: ArrayBuffer, name: string): Promise<Blob
   page.drawText(`Digitális aláírás azonosító: ${crypto.randomUUID()}`);
 
   page.moveDown(200);
-  const logoPath = path.join(process.cwd(), process.env.NODE_ENV === "development" ? "public" : "", "logo.png");
-  console.log(logoPath);
+  const logoPath = path.join(process.cwd(), "static", "logo.png");
   const logoBytes = fs.readFileSync(logoPath);
   const pngLogo = await pdfDoc.embedPng(logoBytes);
   const pngDims = pngLogo.scale(0.1);
